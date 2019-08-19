@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">IndoorLocalizationv2</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_discover_devices">Discover devices</string>
+    <string name="menu_manage_device">Manage device</string>
+    <string name="menu_clear_logs">Clear database logs</string>
+    <string name="menu_clear_defined_devices">Clear defined devices</string>
+    <string name="menu_exit">Exit</string>
+    <string name="menu_about">About</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Localization info fragment elements -->
+    <string name="localiz_btn_connect">Connect</string>
+    <string name="localiz_btn_disconnect">Disconnect</string>
+    <string name="localiz_txtv_log_data">Log data</string>
+
+    <!-- Discover devices fragment elements -->
+    <string name="discov_btn_start_scan">Start scan</string>
+    <string name="discov_btn_stop_scan">Stop scan</string>
+    <string name="discov_txtv_only_my_devices">Only my devices</string>
+
+    <!-- Manage device fragment elements -->
+    <string name="manage_rdio_device_type_f_anchor">Front anchor</string>
+    <string name="manage_rdio_device_type_l_anchor">Left anchor</string>
+    <string name="manage_rdio_device_type_r_anchor">Right anchor</string>
+    <string name="manage_rdio_device_type_t_anchor">Top anchor</string>
+    <string name="manage_rdio_device_type_beacon">BLE Beacon</string>
+    <string name="manage_btn_back">Back</string>
+
+</resources>

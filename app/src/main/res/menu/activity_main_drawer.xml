@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title=" ---- Main ----">
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:title="@string/menu_home" />
+            <item
+                android:id="@+id/nav_discover_devices"
+                android:title="@string/menu_discover_devices" />
+            <item
+                android:id="@+id/nav_clear_db_logs"
+                android:title="@string/menu_clear_logs" />
+            <item
+                android:id="@+id/nav_clear_defined_devices"
+                android:title="@string/menu_clear_defined_devices" />
+        </menu>
+    </item>
+
+    <item android:title=" ---- Other ----">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:title="@string/menu_about" />
+            <item
+                android:id="@+id/nav_exit"
+                android:title="@string/menu_exit" />
+        </menu>
+    </item>
+
+</menu>

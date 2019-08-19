@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:background="#ffffff"
+    >
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/device_relationship"
+            android:layout_width="80dp"
+            android:layout_column="1"
+            android:padding="7dip"
+            android:text="Name"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_rssi"
+            android:layout_width="60dp"
+            android:layout_column="2"
+            android:padding="7dip"
+            android:text="RSSI"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_distance"
+            android:layout_width="80dp"
+            android:layout_column="2"
+            android:padding="7dip"
+            android:text="Distance"
+            android:textAlignment="center" />
+
+        <TableLayout>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Anchor mac addr:" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/anchor_mac_addr"
+                    android:textSize="14dp"
+                    android:textColor="#00a7f5"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Beacon mac addr:" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/beacon_mac_addr"
+                    android:textSize="14dp"
+                    android:textColor="#00a7f5"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="(X, Y, Z):" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/beacon_pos_xyz"
+                    android:textSize="14dp"
+                    android:textColor="#00a7f5"
+                    />
+            </TableRow>
+        </TableLayout>
+    </TableRow>
+</TableLayout>

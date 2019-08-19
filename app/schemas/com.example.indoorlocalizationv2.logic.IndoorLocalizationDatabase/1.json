@@ -1,0 +1,95 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "efbb13665d765a6f828c12fd6ba55118",
+    "entities": [
+      {
+        "tableName": "defined_device",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`defined_device_id` TEXT NOT NULL, `defined_device_name` TEXT, `defined_device_type` TEXT, PRIMARY KEY(`defined_device_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "defined_device_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "_deviceName",
+            "columnName": "defined_device_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_deviceType",
+            "columnName": "defined_device_type",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "defined_device_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "device_log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`log_id` TEXT NOT NULL, `log_mac_address` TEXT, `log_device_name` TEXT, `log_device_type` TEXT, `log_flag` TEXT, `log_rssi` INTEGER NOT NULL, PRIMARY KEY(`log_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "log_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "_macAddress",
+            "columnName": "log_mac_address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_deviceName",
+            "columnName": "log_device_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_deviceType",
+            "columnName": "log_device_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_flag",
+            "columnName": "log_flag",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_rssi",
+            "columnName": "log_rssi",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "log_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"efbb13665d765a6f828c12fd6ba55118\")"
+    ]
+  }
+}
