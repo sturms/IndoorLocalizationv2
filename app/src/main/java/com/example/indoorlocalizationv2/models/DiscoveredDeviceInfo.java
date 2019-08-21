@@ -10,13 +10,15 @@ public class DiscoveredDeviceInfo {
     private String _definedDeviceType;
     private BluetoothDevice _bluetoothDevice;
     private BluetoothGatt _bluetoothGattService;
+    private BLEPosition _position;
 
     public DiscoveredDeviceInfo(
             BluetoothDevice device,
             String macAddress,
             int rssi,
             String definedDeviceName,
-            String definedDeviceType) {
+            String definedDeviceType,
+            BLEPosition position) {
 
         _bluetoothDevice = device;
         _macAddress = macAddress;
@@ -24,6 +26,7 @@ public class DiscoveredDeviceInfo {
         _definedDeviceName = definedDeviceName;
         _definedDeviceType = definedDeviceType;
         _bluetoothGattService = null;
+        _position = position;
     }
 
     public String getMacAddress(){
@@ -64,5 +67,13 @@ public class DiscoveredDeviceInfo {
 
     public void setBluetoothGattService(BluetoothGatt gatt) {
         _bluetoothGattService = gatt;
+    }
+
+    public BLEPosition getPosition() {
+        return _position;
+    }
+
+    public void setPosition(BLEPosition position) {
+        _position = position;
     }
 }

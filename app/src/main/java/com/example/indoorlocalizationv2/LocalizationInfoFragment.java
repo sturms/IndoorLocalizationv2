@@ -19,6 +19,7 @@ import android.widget.ListView;
 
 import com.example.indoorlocalizationv2.logic.BLELogic;
 import com.example.indoorlocalizationv2.logic.IndoorLocalizationDatabase;
+import com.example.indoorlocalizationv2.logic.TrilaterationLogic;
 import com.example.indoorlocalizationv2.models.BLEDevice;
 import com.example.indoorlocalizationv2.models.BLEPosition;
 import com.example.indoorlocalizationv2.models.CircularQueue;
@@ -158,35 +159,32 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
 
         float ratio = rssi * 1.0f / txPower;
         if (ratio < 1.0) {
-            return (float)Math.pow(ratio, 10);
+            return (float) Math.pow(ratio, 10);
         } else {
             // Smooths the calculated distance
             double accuracy = (0.79976) * Math.pow(ratio, 6.7095) + 0.111;
-            return (float)accuracy;
+            return (float) accuracy;
         }
     }
 
-    public float normalizeCalculatedDistance(float calculatedDistance)
-    {
+    public float normalizeCalculatedDistance(float calculatedDistance) {
         float[][] predefinedValues = new float[][]
                 {
-                    new float[] { 0.2f, -53 },
-                    new float[] { 0.4f, -59 },
-                    new float[] { 0.6f, -65 },
-                    new float[] { 0.8f, -69 },
-                    new float[] { 1.0f, -73 },
-                    new float[] { 1.2f, -76 },
-                    new float[] { 1.4f, -78 },
-                    new float[] { 1.6f, -80 },
-                    new float[] { 1.8f, -83 },
-                    new float[] { 2.0f, -86 },
+                        new float[]{0.2f, -53},
+                        new float[]{0.4f, -59},
+                        new float[]{0.6f, -65},
+                        new float[]{0.8f, -69},
+                        new float[]{1.0f, -73},
+                        new float[]{1.2f, -76},
+                        new float[]{1.4f, -78},
+                        new float[]{1.6f, -80},
+                        new float[]{1.8f, -83},
+                        new float[]{2.0f, -86},
                 };
 
         float normalizedDistance;
-        for (int i = 0; i < predefinedValues.length; i++)
-        {
-            if (calculatedDistance <= predefinedValues[i][0])
-            {
+        for (int i = 0; i < predefinedValues.length; i++) {
+            if (calculatedDistance <= predefinedValues[i][0]) {
                 normalizedDistance = (calculatedDistance + predefinedValues[i][0]) / 2;
                 return normalizedDistance;
             }
@@ -240,6 +238,7 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
 
     /**
      * Note: Should the adapter be ArrayAdapter ?
+     *
      * @param device
      * @param rssi
      */
@@ -251,7 +250,7 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
             return;
         }
 
-        BLEDevice deviceInfo = new BLEDevice(device, isUserDefinedDevice);
+        BLEDevice deviceInfo = new BLEDevice(device, true);
         deviceInfo.setMacAddress(macAddress);
         _bleLogic.addOrUpdateDevice(macAddress, deviceInfo);
 
@@ -293,15 +292,27 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
                             updateDevicesUI(devices);
                         }
                     });
-                }
-                else {
+                } else {
                     throw new IOException("Unexpected code " + response);
                 }
             }
         });
     }
 
-    private void updateDevicesUI(List<String> notifications){
+    private BLEPosition UpdateAnchorInformation(BLEPosition anchorToUpdate, HashMap<String, DiscoveredDeviceInfo> definedDevices, String sourceAddress, String targetAddress, int newRSSI) {
+        if (anchorToUpdate == null) {
+            BLEPosition definedPosition = definedDevices.get(sourceAddress).getPosition();
+            anchorToUpdate = new BLEPosition(definedPosition.getX(), definedPosition.getY(), definedPosition.getZ(), 0);
+            anchorToUpdate.setName(definedDevices.get(sourceAddress).getDefinedDeviceName());
+            anchorToUpdate.setMacAddress(sourceAddress);
+        }
+
+        anchorToUpdate.setRSSI(newRSSI);
+        anchorToUpdate.setDistance(this.calculateDistanceAndAverageItsValue(sourceAddress, targetAddress, newRSSI));
+        return anchorToUpdate;
+    }
+
+    private void updateDevicesUI(List<String> notifications) {
         if (notifications.size() == 0) {
             return;
         }
@@ -310,38 +321,69 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
         HashMap<String, BLEDevice> scannedDevices = _bleLogic.getScannedDevices();
 
         for (String notification : notifications) {
-
             // Gets source and target addresses from notification data
             String nSourceAddress = BluetoothExtension.getSourceDeviceAddress(notification);
             String nTargetAddress = BluetoothExtension.getTargetDeviceAddress(notification);
 
             // Checks whether devices in notification are defined in database
             if (definedDevices.containsKey(nSourceAddress) && definedDevices.containsKey(nTargetAddress)) {
-
                 // No need to continue if one of devices is not enabled
                 if ((!scannedDevices.containsKey(nSourceAddress) || !scannedDevices.containsKey(nTargetAddress))) {
                     continue;
                 }
 
-                // No need to continue if one of the devices is inactive (will be removed later from the list)
-                if (!scannedDevices.get(nSourceAddress).isDeviceActive() || !scannedDevices.get(nTargetAddress).isDeviceActive()) {
-                    continue;
-                }
-
-                boolean deviceFound = false;
                 int rssi = BluetoothExtension.getRssi(notification);
+                String anchorType = definedDevices.get(nSourceAddress).getDefinedDeviceType();
+                boolean isBeaconShownInList = false;
                 for (LocalizationInfo lInfo : _localizationInfoList) {
-                    if (lInfo.getAnchorAddress().equals(nSourceAddress) && lInfo.getBeaconAddress().equals(nTargetAddress)) {
 
-                        // Updates the localization information (RSSI, distance, etc.)
-                        this.setLozalizationInfo(lInfo, nSourceAddress, nTargetAddress, rssi);
-                        deviceFound = true;
+                    if (lInfo.getBeacon() != null
+                        && lInfo.getBeacon().getMacAddress().equals(nTargetAddress)) {
+
+                        if (anchorType.equals(getString(R.string.manage_rdio_device_type_l_anchor))) {
+                            BLEPosition leftAnchor = lInfo.getLeftAnchor();
+                            leftAnchor = this.UpdateAnchorInformation(leftAnchor, definedDevices, nSourceAddress, nTargetAddress, rssi);
+                            lInfo.setLeftAnchor(leftAnchor);
+                        } else if (anchorType.equals(getString(R.string.manage_rdio_device_type_f_anchor))) {
+                            BLEPosition frontAnchor = lInfo.getFrontAnchor();
+                            frontAnchor = this.UpdateAnchorInformation(frontAnchor, definedDevices, nSourceAddress, nTargetAddress, rssi);
+                            lInfo.setFrontAnchor(frontAnchor);
+                        } else if (anchorType.equals(getString(R.string.manage_rdio_device_type_r_anchor))) {
+                            BLEPosition rightAnchor = lInfo.getRightAnchor();
+                            rightAnchor = this.UpdateAnchorInformation(rightAnchor, definedDevices, nSourceAddress, nTargetAddress, rssi);
+                            lInfo.setRightAnchor(rightAnchor);
+                        } else if (anchorType.equals(getString(R.string.manage_rdio_device_type_t_anchor))) {
+                            BLEPosition topAnchor = lInfo.getTopAnchor();
+                            topAnchor = this.UpdateAnchorInformation(topAnchor, definedDevices, nSourceAddress, nTargetAddress, rssi);
+                            lInfo.setTopAnchor(topAnchor);
+                        }
+
+                        if (lInfo.getLeftAnchor() != null
+                                && lInfo.getFrontAnchor() != null
+                                && lInfo.getRightAnchor() != null
+                                && lInfo.getTopAnchor() != null) {
+
+                            // Calculate the position
+                            TrilaterationLogic logic = new TrilaterationLogic(
+                                    lInfo.getLeftAnchor(), lInfo.getFrontAnchor(), lInfo.getRightAnchor(), lInfo.getTopAnchor()
+                            );
+                            BLEPosition coordinates = logic.calculateBeaconPosition();
+                            lInfo.getBeacon().setX(coordinates.getX());
+                            lInfo.getBeacon().setY(coordinates.getY());
+                            lInfo.getBeacon().setZ(coordinates.getZ());
+                        }
+
+                        isBeaconShownInList = true;
                         break;
                     }
                 }
 
-                if (!deviceFound){
-                    _localizationInfoList.add(this.setLozalizationInfo(null, nSourceAddress, nTargetAddress, rssi));
+                if (!isBeaconShownInList) {
+                    // If beacon was not found in the UI list then adds it to the first
+                    BLEPosition beacon = new BLEPosition();
+                    beacon.setName(definedDevices.get(nTargetAddress).getDefinedDeviceName());
+                    beacon.setMacAddress(nTargetAddress);
+                    _localizationInfoList.add(new LocalizationInfo(beacon, null, null, null, null));
                 }
 
                 if (_isLoggingEnabled && _loggingCounter % 5 == 0) {
@@ -356,6 +398,7 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
                     _loggingCounter++;
                 }
 
+                // Reflects the updates in the UI
                 _localizListAdapter.notifyDataSetChanged();
             }
         }
@@ -367,48 +410,13 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
         log.setMacAddress(deviceAddress);
         log.setDeviceName(deviceName);
         log.setDeviceType(deviceType);
-        String flag = ((EditText)getView().findViewById(R.id.localiz_et_log_flag)).getText().toString();
+        String flag = ((EditText) getView().findViewById(R.id.localiz_et_log_flag)).getText().toString();
         log.set_flag(flag);
         log.setRssi(rssi);
 
         IndoorLocalizationDatabase database = IndoorLocalizationDatabase.getAppDatabase(getContext());
         database.deviceLogDao().insert(log);
         IndoorLocalizationDatabase.destroyInstance();
-    }
-
-    private void removeInactiveDevicesFromLocalizationList() {
-        Iterator<LocalizationInfo> itr = _localizationInfoList.iterator();
-        while (itr.hasNext()) {
-            LocalizationInfo item = itr.next();
-            if (!_bleLogic.getScannedDevices().get(item.getAnchorAddress()).isDeviceActive()
-                    || !_bleLogic.getScannedDevices().get(item.getBeaconAddress()).isDeviceActive()) {
-                itr.remove();
-            }
-        }
-    }
-
-    private LocalizationInfo setLozalizationInfo(LocalizationInfo input, String sourceAddress, String targetAddress, int rssi) {
-        if (input == null) {
-            input = new LocalizationInfo("", 0, 0.0f, "", "", 0.0f, 0.0f, 0.0f);
-        }
-
-        HashMap<String, DiscoveredDeviceInfo> definedDevices = _bleLogic.getDefinedDevicesHashMap();
-        input.setDeviceRelationshipDisplayText(definedDevices.get(sourceAddress).getDefinedDeviceName()
-                + "<-" + definedDevices.get(targetAddress).getDefinedDeviceName());
-        input.setAnchorAddress(sourceAddress);
-        input.setBeaconAddress(targetAddress);
-
-        input.setRSSI(rssi);
-        input.setDistance(this.calculateDistanceAndAverageItsValue(sourceAddress, targetAddress, rssi));
-
-        BLEPosition position = this.calculateBeaconCoordinates(input);
-        if (position != null) {
-            input.setPositionX(position.getX());
-            input.setPositionY(position.getY());
-            input.setPositionZ(position.getZ());
-        }
-
-        return input;
     }
 
     private float calculateDistanceAndAverageItsValue(String sourceAddress, String targetAddress, int rssi) {
@@ -422,8 +430,7 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
             CircularQueue newQueue = new CircularQueue(prevousRSSIValuesQueueSize);
             newQueue.add(normalizedDistance);
             _previousRSSIValuesHashMap.put(previousRSSIValuesKey, newQueue);
-        }
-        else {
+        } else {
             // Gets average distance value for given source/target device
             CircularQueue queue = _previousRSSIValuesHashMap.get(previousRSSIValuesKey);
             queue.add(normalizedDistance);
@@ -431,15 +438,6 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
         }
 
         return averageDistance;
-    }
-
-    private BLEPosition calculateBeaconCoordinates(LocalizationInfo input) {
-
-        // TODO: Search anchors by type for target beacon
-        // TODO: retrieve anchors position and distance till beacon (the anchor x, y, z should be possible to provide from UI side)
-        // TODO: retrieve anchor's x, y, z coordinates from database only if they don't already exist in model
-        // TODO: Return real value
-        return null;
     }
 
     private Handler _httpClientHandle = new Handler();
@@ -459,7 +457,8 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
                     @Override
                     public void run() {
                         Gson gson = new Gson();
-                        Type listType = new TypeToken< ArrayList<String> >(){}.getType();
+                        Type listType = new TypeToken<ArrayList<String>>() {
+                        }.getType();
                         List<String> devices = gson.fromJson(myNewResponse, listType);
                         updateDevicesUI(devices);
                     }

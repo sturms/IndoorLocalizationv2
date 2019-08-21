@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import com.example.indoorlocalizationv2.models.BLEDevice;
+import com.example.indoorlocalizationv2.models.BLEPosition;
 import com.example.indoorlocalizationv2.models.DiscoveredDeviceInfo;
 import com.example.indoorlocalizationv2.models.entities.DefinedDevice;
 
@@ -55,7 +56,26 @@ public class BLELogic {
         IndoorLocalizationDatabase.destroyInstance();
         for (DefinedDevice definedDevice : definedDevicesDbList) {
             String macAddr = definedDevice.getId();
-            _definedDevicesHashMap.put(macAddr, new DiscoveredDeviceInfo(null, macAddr, 0, definedDevice.getDeviceName(), definedDevice.getDeviceType()));
+
+            // Either anchor node defined coordinates or beacon's calculated coordinates and distance
+            BLEPosition position = new BLEPosition(
+                    definedDevice.getAnchorCoordinateX(),
+                    definedDevice.getAnchorCoordinateY(),
+                    definedDevice.getAnchorCoordinateZ(),
+                    0);
+
+            _definedDevicesHashMap.put(
+                    macAddr,
+                    new DiscoveredDeviceInfo(
+                            null,
+                            macAddr,
+                            0,
+                            definedDevice.getDeviceName(),
+                            definedDevice.getDeviceType(),
+                            position
+                    )
+            );
+
             _definedDevicesList.add(macAddr);
         }
 

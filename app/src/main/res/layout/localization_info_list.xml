@@ -7,24 +7,22 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:background="#ffffff"
-    >
+    android:paddingBottom="15dp"
+    android:background="#ffffff">
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="155dp">
         <TextView
-            android:id="@+id/device_relationship"
+            android:id="@+id/device_anchor_left"
             android:layout_width="80dp"
             android:layout_column="1"
             android:padding="7dip"
-            android:text="Name"
+            android:text="Anchor_l"
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/device_rssi"
+            android:id="@+id/device_anchor_left_rssi"
             android:layout_width="60dp"
             android:layout_column="2"
             android:padding="7dip"
@@ -32,54 +30,190 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/device_distance"
+            android:id="@+id/device_anchor_left_distance"
             android:layout_width="80dp"
-            android:layout_column="2"
+            android:layout_column="3"
             android:padding="7dip"
             android:text="Distance"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_left_mac_addr"
+            android:layout_width="wrap_content"
+            android:layout_column="4"
+            android:layout_height="wrap_content"
+            android:textColor="#00a7f5"
+            android:textSize="14dp" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="155dp">
+
+        <TextView
+            android:id="@+id/device_anchor_front"
+            android:layout_width="80dp"
+            android:layout_column="1"
+            android:padding="7dip"
+            android:text="Anchor_f"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_front_rssi"
+            android:layout_width="60dp"
+            android:layout_column="2"
+            android:padding="7dip"
+            android:text="RSSI"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_front_distance"
+            android:layout_width="80dp"
+            android:layout_column="3"
+            android:padding="7dip"
+            android:text="Distance"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_front_mac_addr"
+            android:layout_width="wrap_content"
+            android:layout_column="4"
+            android:layout_height="wrap_content"
+            android:textColor="#00a7f5"
+            android:textSize="14dp" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="155dp">
+
+        <TextView
+            android:id="@+id/device_anchor_right"
+            android:layout_width="80dp"
+            android:layout_column="1"
+            android:padding="7dip"
+            android:text="Anchor_r"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_right_rssi"
+            android:layout_width="60dp"
+            android:layout_column="2"
+            android:padding="7dip"
+            android:text="RSSI"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_right_distance"
+            android:layout_width="80dp"
+            android:layout_column="3"
+            android:padding="7dip"
+            android:text="Distance"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_right_mac_addr"
+            android:layout_width="wrap_content"
+            android:layout_column="4"
+            android:layout_height="wrap_content"
+            android:textColor="#00a7f5"
+            android:textSize="14dp" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="155dp">
+
+        <TextView
+            android:id="@+id/device_anchor_top"
+            android:layout_width="80dp"
+            android:layout_column="1"
+            android:padding="7dip"
+            android:text="Anchor_t"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_top_rssi"
+            android:layout_width="60dp"
+            android:layout_column="2"
+            android:padding="7dip"
+            android:text="RSSI"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_top_distance"
+            android:layout_width="80dp"
+            android:layout_column="3"
+            android:padding="7dip"
+            android:text="Distance"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_anchor_top_mac_addr"
+            android:layout_width="wrap_content"
+            android:layout_column="4"
+            android:layout_height="wrap_content"
+            android:textColor="#00a7f5"
+            android:textSize="14dp" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="155dp">
+
+        <TextView
+            android:id="@+id/device_beacon"
+            android:layout_width="80dp"
+            android:layout_column="1"
+            android:padding="7dip"
+            android:text="Beacon"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_beacon_rssi"
+            android:layout_width="60dp"
+            android:layout_column="2"
+            android:padding="7dip"
+            android:text="-"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/device_beacon_distance"
+            android:layout_width="80dp"
+            android:layout_column="3"
+            android:padding="7dip"
+            android:text="-"
             android:textAlignment="center" />
 
         <TableLayout>
             <TableRow>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:text="Anchor mac addr:" />
-            </TableRow>
-            <TableRow>
-                <TextView
+                    android:id="@+id/device_beacon_mac_addr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/anchor_mac_addr"
-                    android:textSize="14dp"
                     android:textColor="#00a7f5"
-                    />
+                    android:textSize="14dp" />
             </TableRow>
+
             <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="Beacon mac addr:" />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/beacon_mac_addr"
-                    android:textSize="14dp"
-                    android:textColor="#00a7f5"
-                    />
-            </TableRow>
-            <TableRow>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="(X, Y, Z):" />
             </TableRow>
+
             <TableRow>
+
                 <TextView
-                    android:id="@+id/beacon_pos_xyz"
-                    android:textSize="14dp"
+                    android:id="@+id/device_beacon_pos_xyz"
                     android:textColor="#00a7f5"
-                    />
+                    android:textSize="14dp" />
             </TableRow>
         </TableLayout>
     </TableRow>
+
+
+
+
+
 </TableLayout>

@@ -6,6 +6,11 @@ public class BLEPosition {
     private float z;
     private float distance;
 
+    // Some optional fields
+    private String name;
+    private String macAddress;
+    private int rssi;
+
     public BLEPosition() {}
 
     public BLEPosition(float x, float y, float z, float distance) {
@@ -47,4 +52,27 @@ public class BLEPosition {
         this.distance = distance;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMacAddress() {
+        return this.macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
+    public int getRSSI() {
+        return this.rssi;
+    }
+
+    public void setRSSI(int rssi) {
+        this.rssi = rssi;
+    }
 }

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.indoorlocalizationv2.logic.IndoorLocalizationDatabase;
+import com.example.indoorlocalizationv2.models.BLEPosition;
 import com.example.indoorlocalizationv2.models.entities.DefinedDevice;
 import com.example.indoorlocalizationv2.logic.BLELogic;
 import com.example.indoorlocalizationv2.models.BLEDevice;
@@ -103,6 +104,8 @@ public class DiscoverDevicesFragment extends Fragment implements View.OnClickLis
                     bundle.putString("deviceName", device.getDeviceName());
                     bundle.putString("deviceType", device.getDeviceType());
 
+                    // TODO: send also the position
+
                     ManageDeviceFragment manageDeviceFragm = new ManageDeviceFragment();
                     manageDeviceFragm.setArguments(bundle);
                     _mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, manageDeviceFragm).commit();
@@ -115,7 +118,11 @@ public class DiscoverDevicesFragment extends Fragment implements View.OnClickLis
             IndoorLocalizationDatabase.destroyInstance();
             for (DefinedDevice definedDevice : definedDevicesDbList) {
                 String macAddr = definedDevice.getId();
-                _definedDevices.put(macAddr, new DiscoveredDeviceInfo(null, macAddr, 0, definedDevice.getDeviceName(), definedDevice.getDeviceType()));
+                BLEPosition position = new BLEPosition();
+                position.setX(definedDevice.getAnchorCoordinateX());
+                position.setY(definedDevice.getAnchorCoordinateY());
+                position.setZ(definedDevice.getAnchorCoordinateZ());
+                _definedDevices.put(macAddr, new DiscoveredDeviceInfo(null, macAddr, 0, definedDevice.getDeviceName(), definedDevice.getDeviceType(), position));
             }
 
             this.initializeEventHandlersForControls(view);
@@ -129,11 +136,14 @@ public class DiscoverDevicesFragment extends Fragment implements View.OnClickLis
         for (String defaultAnchorAddr : _bleLogic.getDefaultAnchorNodes()) {
             String name = "";
             String type = "";
+            BLEPosition position = null;
             if (_definedDevices.containsKey(defaultAnchorAddr)) {
                 name = _definedDevices.get(defaultAnchorAddr).getDefinedDeviceName();
                 type = _definedDevices.get(defaultAnchorAddr).getDefinedDeviceType();
+                position = _definedDevices.get(defaultAnchorAddr).getPosition();
             }
-            _discoveredDevicesInfoList.add(new DiscoveredDeviceInfo(null, defaultAnchorAddr, 0, name, type));
+
+            _discoveredDevicesInfoList.add(new DiscoveredDeviceInfo(null, defaultAnchorAddr, 0, name, type, position));
         }
     }
 
@@ -156,14 +166,16 @@ public class DiscoverDevicesFragment extends Fragment implements View.OnClickLis
         BLEDevice deviceInfo = new BLEDevice(device, isUserDefinedDevice);
         String definedDeviceName = "";
         String definedDeviceType = "";
+        BLEPosition position = null;
         if (!allDevices.containsKey(macAddress)) {
             if (_definedDevices.containsKey(macAddress)) {
                 DiscoveredDeviceInfo definedDevice = _definedDevices.get(macAddress);
                 definedDeviceName = definedDevice.getDefinedDeviceName();
                 definedDeviceType = definedDevice.getDefinedDeviceType();
+                position = definedDevice.getPosition();
             }
 
-            DiscoveredDeviceInfo discoveredDevice = new DiscoveredDeviceInfo(device, macAddress, rssiToPhone, definedDeviceName, definedDeviceType);
+            DiscoveredDeviceInfo discoveredDevice = new DiscoveredDeviceInfo(device, macAddress, rssiToPhone, definedDeviceName, definedDeviceType, position);
             _discoveredDevicesInfoList.add(discoveredDevice);
             deviceInfo.setMacAddress(macAddress);
         }

@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.indoorlocalizationv2.models.BLEPosition;
 import com.example.indoorlocalizationv2.models.LocalizationInfo;
 import java.util.List;
 
@@ -36,28 +38,82 @@ public class LocalizationInfoListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = View.inflate(_context, R.layout.localization_info_list, null);
 
-        TextView tv_relationship = (TextView)v.findViewById(R.id.device_relationship);
-        TextView tv_rssi = (TextView)v.findViewById(R.id.device_rssi);
-        TextView tv_distance = (TextView)v.findViewById(R.id.device_distance);
+        BLEPosition leftAnchorData = _localizationInfoList.get(position).getLeftAnchor();
+        if (leftAnchorData != null) {
+            // Find left anchor text fields
+            TextView tv_left_anchor = v.findViewById(R.id.device_anchor_left);
+            TextView tv_left_anchor_rssi = v.findViewById(R.id.device_anchor_left_rssi);
+            TextView tv_left_anchor_distance = v.findViewById(R.id.device_anchor_left_distance);
+            TextView tv_left_anchor_macAddr = v.findViewById(R.id.device_anchor_left_mac_addr);
 
-        // Basic info
-        tv_relationship.setText(_localizationInfoList.get(position).getDeviceRelationshipDisplayText());
-        tv_rssi.setText(Integer.toString(_localizationInfoList.get(position).getRSSI()));
-        tv_distance.setText(Float.toString(_localizationInfoList.get(position).getDistance()));
+            // Set left anchor text fields values
+            tv_left_anchor.setText(leftAnchorData.getName());
+            tv_left_anchor_rssi.setText(Integer.toString(leftAnchorData.getRSSI()));
+            tv_left_anchor_distance.setText(Float.toString(leftAnchorData.getDistance()));
+            tv_left_anchor_macAddr.setText(leftAnchorData.getMacAddress());
+        }
 
-        // Additional info
-        TextView tv_anchorMacAddr = (TextView)v.findViewById(R.id.anchor_mac_addr);
-        TextView tv_beaconMacAddr = (TextView)v.findViewById(R.id.beacon_mac_addr);
-        TextView tv_posXYZ = (TextView)v.findViewById(R.id.beacon_pos_xyz);
+        BLEPosition frontAnchorData = _localizationInfoList.get(position).getFrontAnchor();
+        if (frontAnchorData != null) {
+            // Find front anchor text fields
+            TextView tv_front_anchor = v.findViewById(R.id.device_anchor_front);
+            TextView tv_front_anchor_rssi = v.findViewById(R.id.device_anchor_front_rssi);
+            TextView tv_front_anchor_distance = v.findViewById(R.id.device_anchor_front_distance);
+            TextView tv_front_anchor_macAddr = v.findViewById(R.id.device_anchor_front_mac_addr);
 
-        tv_anchorMacAddr.setText(_localizationInfoList.get(position).getAnchorAddress());
-        tv_beaconMacAddr.setText(_localizationInfoList.get(position).getBeaconAddress());
-        tv_posXYZ.setText(
-                _localizationInfoList.get(position).getPositionX()
-                + ", "
-                + _localizationInfoList.get(position).getPositionY()
-                + ", "
-                + _localizationInfoList.get(position).getPositionZ());
+            // Set front anchor text fields values
+            tv_front_anchor.setText(frontAnchorData.getName());
+            tv_front_anchor_rssi.setText(Integer.toString(frontAnchorData.getRSSI()));
+            tv_front_anchor_distance.setText(Float.toString(frontAnchorData.getDistance()));
+            tv_front_anchor_macAddr.setText(frontAnchorData.getMacAddress());
+        }
+
+        BLEPosition rightAnchorData = _localizationInfoList.get(position).getRightAnchor();
+        if (rightAnchorData != null) {
+            // Find right anchor text fields
+            TextView tv_right_anchor = v.findViewById(R.id.device_anchor_right);
+            TextView tv_right_anchor_rssi = v.findViewById(R.id.device_anchor_right_rssi);
+            TextView tv_right_anchor_distance = v.findViewById(R.id.device_anchor_right_distance);
+            TextView tv_right_anchor_macAddr = v.findViewById(R.id.device_anchor_right_mac_addr);
+
+            // Set right anchor text fields values
+            tv_right_anchor.setText(rightAnchorData.getName());
+            tv_right_anchor_rssi.setText(Integer.toString(rightAnchorData.getRSSI()));
+            tv_right_anchor_distance.setText(Float.toString(rightAnchorData.getDistance()));
+            tv_right_anchor_macAddr.setText(rightAnchorData.getMacAddress());
+        }
+
+        BLEPosition topAnchorData = _localizationInfoList.get(position).getTopAnchor();
+        if (topAnchorData != null) {
+            // Find top anchor text fields
+            TextView tv_top_anchor = v.findViewById(R.id.device_anchor_top);
+            TextView tv_top_anchor_rssi = v.findViewById(R.id.device_anchor_top_rssi);
+            TextView tv_top_anchor_distance = v.findViewById(R.id.device_anchor_top_distance);
+            TextView tv_top_anchor_macAddr = v.findViewById(R.id.device_anchor_top_mac_addr);
+
+            // Set top anchor text fields values
+            tv_top_anchor.setText(topAnchorData.getName());
+            tv_top_anchor_rssi.setText(Integer.toString(topAnchorData.getRSSI()));
+            tv_top_anchor_distance.setText(Float.toString(topAnchorData.getDistance()));
+            tv_top_anchor_macAddr.setText(topAnchorData.getMacAddress());
+        }
+
+        BLEPosition beaconData = _localizationInfoList.get(position).getBeacon();
+        if (beaconData != null) {
+            // Find beacon text fields
+            TextView tv_beacon = v.findViewById(R.id.device_beacon);
+            TextView tv_beacon_rssi = v.findViewById(R.id.device_beacon_rssi);
+            TextView tv_beacon_distance = v.findViewById(R.id.device_beacon_distance);
+            TextView tv_bacon_macAddr = v.findViewById(R.id.device_beacon_mac_addr);
+            TextView tv_posXYZ = v.findViewById(R.id.device_beacon_pos_xyz);
+
+            // Set beacon text fields values
+            tv_beacon.setText(beaconData.getName());
+            tv_beacon_rssi.setText("-");
+            tv_beacon_distance.setText("-");
+            tv_bacon_macAddr.setText(beaconData.getMacAddress());
+            tv_posXYZ.setText(beaconData.getX() + ", " + beaconData.getY() + ", " + beaconData.getZ());
+        }
 
         return v;
     }

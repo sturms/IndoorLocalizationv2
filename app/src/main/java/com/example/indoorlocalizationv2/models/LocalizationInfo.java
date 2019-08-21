@@ -1,96 +1,64 @@
 package com.example.indoorlocalizationv2.models;
 
 public class LocalizationInfo {
-    private String _deviceRelationshipDisplayText;
-    private int _rssi;
-    private float _distance;
-    private String _anchorAddress;
-    private String _beaconAddress;
-    private float _positionX;
-    private float _positionY;
-    private float _positionZ;
+
+    private BLEPosition beacon;
+    private BLEPosition leftAnchor;
+    private BLEPosition frontAnchor;
+    private BLEPosition rightAnchor;
+    private BLEPosition topAnchor;
 
     public LocalizationInfo(
-            String deviceRelationshipDisplayText,
-            int rssi,
-            float distance,
-            String anchorAddress,
-            String beaconAddress,
-            float positionX,
-            float positionY,
-            float positionZ) {
+            BLEPosition beacon,
+            BLEPosition leftAnchor,
+            BLEPosition frontAnchor,
+            BLEPosition rightAnchor,
+            BLEPosition topAnchor) {
 
-        _deviceRelationshipDisplayText = deviceRelationshipDisplayText;
-        _rssi = rssi;
-        _distance = distance;
-        _anchorAddress = anchorAddress;
-        _beaconAddress = beaconAddress;
-        _positionX = positionX;
-        _positionY = positionY;
-        _positionZ = positionZ;
+        this.beacon = beacon;
+        this.leftAnchor = leftAnchor;
+        this.frontAnchor = frontAnchor;
+        this.rightAnchor = rightAnchor;
+        this.topAnchor = topAnchor;
     }
 
-    public String getDeviceRelationshipDisplayText() {
-        return _deviceRelationshipDisplayText;
+    public BLEPosition getBeacon() {
+        return beacon;
     }
 
-    public void setDeviceRelationshipDisplayText(String displayText) {
-        _deviceRelationshipDisplayText = displayText;
+    public void setBeacon(BLEPosition beacon) {
+        this.beacon = beacon;
     }
 
-    public int getRSSI() {
-        return _rssi;
+    public BLEPosition getLeftAnchor() {
+        return leftAnchor;
     }
 
-    public float getDistance() {
-        return _distance;
+    public void setLeftAnchor(BLEPosition leftAnchor) {
+        this.leftAnchor = leftAnchor;
     }
 
-    public String getBeaconAddress() {
-        return _beaconAddress;
+    public BLEPosition getFrontAnchor() {
+        return frontAnchor;
     }
 
-    public float getPositionX() {
-        return _positionX;
+    public void setFrontAnchor(BLEPosition frontAnchor) {
+        this.frontAnchor = frontAnchor;
     }
 
-    public float getPositionY() {
-        return _positionY;
+    public BLEPosition getRightAnchor() {
+        return rightAnchor;
     }
 
-    public float getPositionZ() {
-        return _positionZ;
+    public void setRightAnchor(BLEPosition rightAnchor) {
+        this.rightAnchor = rightAnchor;
     }
 
-    public String getAnchorAddress() {
-        return _anchorAddress;
+    public BLEPosition getTopAnchor() {
+        return topAnchor;
     }
 
-    public void setRSSI(int rssi) {
-        _rssi = rssi;
-    }
-
-    public void setDistance(float distance) {
-        _distance = distance;
-    }
-
-    public void setAnchorAddress(String anchorAddress) {
-        _anchorAddress = anchorAddress;
-    }
-
-    public void setBeaconAddress(String beaconAddress) {
-        _beaconAddress = beaconAddress;
-    }
-
-    public void setPositionX(float positionX) {
-        _positionX = positionX;
-    }
-
-    public void setPositionY(float positionY) {
-        _positionY = positionY;
-    }
-
-    public void setPositionZ(float positionZ) {
-        _positionZ = positionZ;
+    public void setTopAnchor(BLEPosition topAnchor) {
+        this.topAnchor = topAnchor;
     }
 }
