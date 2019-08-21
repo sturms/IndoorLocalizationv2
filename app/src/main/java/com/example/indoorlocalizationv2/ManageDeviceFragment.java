@@ -42,6 +42,14 @@ public class ManageDeviceFragment extends Fragment implements View.OnClickListen
         if (existingDeviceDb != null) {
             et_deviceName.setText(existingDeviceDb.getDeviceName());
             this.setDeviceTypeRadioButtonValue(existingDeviceDb.getDeviceType());
+
+            // Prefill the coordinates
+            EditText et_posittionX = view.findViewById(R.id.et_anchor_coordinates_x);
+            EditText et_posittionY = view.findViewById(R.id.et_anchor_coordinates_y);
+            EditText et_posittionZ = view.findViewById(R.id.et_anchor_coordinates_z);
+            et_posittionX.setText(Float.toString(existingDeviceDb.getAnchorCoordinateX()));
+            et_posittionY.setText(Float.toString(existingDeviceDb.getAnchorCoordinateY()));
+            et_posittionZ.setText(Float.toString(existingDeviceDb.getAnchorCoordinateZ()));
         }
 
         // This instance should be destroyed ASAP to save resources
