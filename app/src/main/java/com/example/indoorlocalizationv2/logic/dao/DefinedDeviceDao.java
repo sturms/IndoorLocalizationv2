@@ -21,6 +21,9 @@ public interface DefinedDeviceDao {
     @Query("SELECT * FROM defined_device WHERE defined_device_id =:id")
     DefinedDevice getById(String id);
 
+    @Query("SELECT * FROM defined_device WHERE defined_device_name =:name AND rowid = 1")
+    DefinedDevice getByName(String name);
+
     @Update
     void update(DefinedDevice deviceToUpdate);
 

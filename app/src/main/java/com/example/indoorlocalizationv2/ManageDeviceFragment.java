@@ -19,6 +19,8 @@ import com.example.indoorlocalizationv2.logic.IndoorLocalizationDatabase;
 import com.example.indoorlocalizationv2.models.BLEDevice;
 import com.example.indoorlocalizationv2.models.entities.DefinedDevice;
 
+import java.util.List;
+
 public class ManageDeviceFragment extends Fragment implements View.OnClickListener {
 
     private String _macAddress;
@@ -105,6 +107,14 @@ public class ManageDeviceFragment extends Fragment implements View.OnClickListen
                     }
                 }
 
+                DefinedDevice deviceByName = database.definedDeviceDao().getByName(deviceName);
+                if (deviceByName != null) {
+                    // Cannot be two devices with the same name
+                    Toast.makeText(getActivity(), "Device with this name already exists!", Toast.LENGTH_SHORT).show();
+                    IndoorLocalizationDatabase.destroyInstance();
+                    return;
+                }
+
                 if (existingDeviceDb == null) {
                     // If device not already exists then adds it
                     this.addNewDeviceToDatabase(database, macAddress, deviceName, selectedRadioValue, anchorCoordinateX, anchorCoordinateY, anchorCoordinateZ);
@@ -119,7 +129,6 @@ public class ManageDeviceFragment extends Fragment implements View.OnClickListen
                     this.updateDeviceInDatabase(database, existingDeviceDb);
                 }
 
-                // Dispose the database instance as it is not needed anymore
                 IndoorLocalizationDatabase.destroyInstance();
                 break;
             case R.id.btn_cancel_device_saving:
