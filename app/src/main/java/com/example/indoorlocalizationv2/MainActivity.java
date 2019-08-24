@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.example.indoorlocalizationv2.logic.IndoorLocalizationDatabase;
+import com.example.indoorlocalizationv2.models.BelongingsOperationType;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,9 +76,18 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_search_stuff) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchBelongingsFragment()).commit();
+
         }
         else if (id == R.id.nav_add_belonging) {
-            // TODO: Call the add belongings fragment from here
+            Bundle bundle = new Bundle();
+            bundle.putString("operationType", BelongingsOperationType.ADD.toString());
+            bundle.putString("searchCriteria", "");
+            bundle.putInt("itemId", 0);
+            bundle.putString("beaconName", "");
+            BelongingsManagementFragment belongingsManagementFragm = new BelongingsManagementFragment();
+            belongingsManagementFragm.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, belongingsManagementFragm).commit();
+
         }
         else if (id == R.id.nav_clear_db_logs) {
             new AlertDialog.Builder(this)

@@ -43,5 +43,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_belongings_header">Search belongings</string>
     <string name="belongings_search_btn">Search</string>
+    <string name="manage_belongings_header">Belongings management</string>
+    <string name="belongings_manage_item_name">Item name:</string>
+    <string name="belongings_manage_item_descr">Item description:</string>
 
 </resources>
