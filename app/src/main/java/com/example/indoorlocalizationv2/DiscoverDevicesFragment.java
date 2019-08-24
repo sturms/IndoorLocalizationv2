@@ -85,7 +85,7 @@ public class DiscoverDevicesFragment extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // Localization list initialize
-        _lvDiscoveredDevicesInfo = (ListView) view.findViewById(R.id.listview_discover_devices);
+        _lvDiscoveredDevicesInfo = view.findViewById(R.id.listview_discover_devices);
         if (_lvDiscoveredDevicesInfo != null) {
             _discoveredDevicesInfoList = new ArrayList<>();
             _definedDevices = new HashMap<>();

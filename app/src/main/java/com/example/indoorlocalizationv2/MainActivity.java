@@ -67,9 +67,19 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LocalizationInfoFragment()).commit();
-        } else if (id == R.id.nav_discover_devices) {
+
+        }
+        else if (id == R.id.nav_discover_devices) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscoverDevicesFragment()).commit();
-        }  else if (id == R.id.nav_clear_db_logs) {
+
+        }
+        else if (id == R.id.nav_search_stuff) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchBelongingsFragment()).commit();
+        }
+        else if (id == R.id.nav_add_belonging) {
+            // TODO: Call the add belongings fragment from here
+        }
+        else if (id == R.id.nav_clear_db_logs) {
             new AlertDialog.Builder(this)
                     .setTitle("Clear database logs")
                     .setMessage("Do you really want to clear data regarding logged info?")
@@ -97,11 +107,15 @@ public class MainActivity extends AppCompatActivity
                             Toast.makeText(MainActivity.this, "Devices cleared", Toast.LENGTH_SHORT).show();
                         }})
                     .setNegativeButton(android.R.string.no, null).show();
+
         }
         else if (id == R.id.nav_about) {
             Toast.makeText(this, "TODO: implement about fragment", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_exit) {
+
+        }
+        else if (id == R.id.nav_exit) {
             Toast.makeText(this, "TODO: show confirmation message and close app", Toast.LENGTH_SHORT).show();
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -63,7 +63,7 @@
         <TextView
             android:layout_width="106dp"
             android:layout_height="match_parent"
-            android:text="Relationship"
+            android:text="Name"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="14dp" />
