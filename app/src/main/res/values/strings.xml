@@ -34,5 +34,9 @@
     <string name="manage_rdio_device_type_t_anchor">Top anchor</string>
     <string name="manage_rdio_device_type_beacon">BLE Beacon</string>
     <string name="manage_btn_back">Back</string>
+    <string name="menu_search_belongings">Search belongings</string>
+    <string name="menu_add_belonging">Add new belonging</string>
+    <string name="menu_main_title">---- Main ----</string>
+    <string name="menu_other_title">---- Other ----</string>
 
 </resources>
