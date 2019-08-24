@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
-        android:id="@+id/belongings_beacon_dropdown"
+        android:id="@+id/belongings_manage_beacon_dropdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"

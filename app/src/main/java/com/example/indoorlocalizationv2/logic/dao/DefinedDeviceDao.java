@@ -18,6 +18,9 @@ public interface DefinedDeviceDao {
     @Query("SELECT * FROM defined_device")
     List<DefinedDevice> getAll();
 
+    @Query("SELECT * FROM defined_device WHERE defined_device_type = :deviceType")
+    List<DefinedDevice> getByDeviceType(String deviceType);
+
     @Query("SELECT * FROM defined_device WHERE defined_device_id =:id")
     DefinedDevice getById(String id);
 

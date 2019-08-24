@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "box_item")
 public class BoxItem {
     @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "box_item_id")
     private int id;
 

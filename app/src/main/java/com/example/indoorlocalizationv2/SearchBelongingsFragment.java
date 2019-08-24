@@ -15,8 +15,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.indoorlocalizationv2.logic.IndoorLocalizationDatabase;
 import com.example.indoorlocalizationv2.models.BelongingsOperationType;
 import com.example.indoorlocalizationv2.models.SearchBelongingsItemInfo;
+import com.example.indoorlocalizationv2.models.entities.BoxItem;
+import com.example.indoorlocalizationv2.models.entities.DefinedDevice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,26 +52,12 @@ public class SearchBelongingsFragment extends Fragment implements View.OnClickLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         _lvSearchBelongingsInfo = view.findViewById(R.id.listview_search_belongings);
-
         _searchBelongingsInfoList = new ArrayList<>();
         _belongingsBoxesDropdownValues = new ArrayList<>();
 
         // Initializes search belongings list adapter
         _searchBelongingsListAdapter = new SearchBelongingsListAdapter(view.getContext(), _searchBelongingsInfoList);
         _lvSearchBelongingsInfo.setAdapter(_searchBelongingsListAdapter);
-
-        // Populate the list with data from database (TODO: First needs to add a Belongings table)
-        // TODO: using hard-coded data for testing purposes (remove when table is added)
-        _searchBelongingsInfoList.add(new SearchBelongingsItemInfo(1, "Some stuff"));
-        _searchBelongingsInfoList.add(new SearchBelongingsItemInfo(2, "Another stuff but long text"));
-        _searchBelongingsInfoList.add(new SearchBelongingsItemInfo(3, "Other thingies"));
-        _searchBelongingsListAdapter.notifyDataSetChanged();
-
-        // TODO: replace dropdown's values with real data
-        _belongingsBoxesDropdownValues.add(""); // First item should be empty
-        _belongingsBoxesDropdownValues.add("b1");
-        _belongingsBoxesDropdownValues.add("b2");
-        _belongingsBoxesDropdownValues.add("b3");
 
         // On item click listener
         _lvSearchBelongingsInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,6 +77,14 @@ public class SearchBelongingsFragment extends Fragment implements View.OnClickLi
 
             }
         });
+
+        _belongingsBoxesDropdownValues.add(""); // First item should be empty
+        IndoorLocalizationDatabase database = IndoorLocalizationDatabase.getAppDatabase(getContext());
+        List<DefinedDevice> beacons = database.definedDeviceDao().getByDeviceType(getString(R.string.manage_rdio_device_type_beacon));
+        for (DefinedDevice b : beacons) {
+            _belongingsBoxesDropdownValues.add(b.getDeviceName());
+        }
+        IndoorLocalizationDatabase.destroyInstance();
 
         // Get the spinner from the xml
         Spinner dropdown = view.findViewById(R.id.belongings_boxes_dropdown);
@@ -131,9 +128,37 @@ public class SearchBelongingsFragment extends Fragment implements View.OnClickLi
         switch (view.getId()) {
             case R.id.btn_belongings_search:
                 _searchCriteria = ((EditText)getView().findViewById(R.id.et_belongings_search)).getText().toString();
-                // TODO: Implement the search logic here
 
+                // Resets the list data
+                _searchBelongingsInfoList.clear();
+
+                // Populate the list with data from database
+                IndoorLocalizationDatabase database = IndoorLocalizationDatabase.getAppDatabase(getContext());
+                List<BoxItem> boxItems = database.boxItemDao().getAll();
+                for (BoxItem item : boxItems) {
+
+                    // Filtering by beacon name
+                    if (!_selectedBeaconName.isEmpty()) {
+                        DefinedDevice beacon = database.definedDeviceDao().getById(item.getBeaconMacAddress());
+                        if (!beacon.getDeviceName().equals(_selectedBeaconName)) {
+                            continue;
+                        }
+                    }
+
+                    // Filtering by item name and description
+                    if (!_searchCriteria.isEmpty()
+                        && !item.getBoxItemName().contains(_searchCriteria) && !_searchCriteria.contains(item.getBoxItemName())
+                            && !item.getBoxItemDescription().contains(_searchCriteria) && !_searchCriteria.contains(item.getBoxItemDescription())
+                    ) {
+                        continue;
+                    }
+
+                    _searchBelongingsInfoList.add(new SearchBelongingsItemInfo(item.getId(), item.getBoxItemName()));
+                }
+
+                _searchBelongingsListAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), "Search invoked", Toast.LENGTH_SHORT).show();
+                IndoorLocalizationDatabase.destroyInstance();
                 break;
         }
     }

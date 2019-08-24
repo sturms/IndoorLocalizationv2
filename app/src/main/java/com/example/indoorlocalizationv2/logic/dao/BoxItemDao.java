@@ -23,6 +23,6 @@ public interface BoxItemDao {
     @Update
     void update(BoxItem itemToUpdate);
 
-    @Query("DELETE FROM box_item")
-    void clearAllData();
+    @Query("DELETE FROM box_item WHERE box_item_id =:id")
+    void delete(int id);
 }
