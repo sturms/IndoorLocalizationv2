@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.indoorlocalizationv2.models.BLEPosition;
@@ -114,6 +115,24 @@ public class LocalizationInfoListAdapter extends BaseAdapter {
             tv_bacon_macAddr.setText(beaconData.getMacAddress());
             tv_posXYZ.setText(beaconData.getX() + ", " + beaconData.getY() + ", " + beaconData.getZ());
         }
+
+        CustomView customView = v.findViewById(R.id.v_localiz_position_graphically);
+
+        // Front view
+        customView.changeBeaconFrontViewCoordinates(beaconData.getX(), beaconData.getZ(), 10);
+        customView.setTheShelfSizeFrontView(rightAnchorData.getX(), topAnchorData.getZ());
+
+        // Top view
+        customView.changeBeaconTopViewCoordinates(beaconData.getX(), beaconData.getY(), 10);
+        customView.setTheShelfDepthTopView(frontAnchorData.getY());
+
+        Button btn_moreInfo = v.findViewById(R.id.btn_localiz_view_position_graphically);
+        btn_moreInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View btnView) {
+                // TODO: toggle visibility
+            }
+        });
 
         return v;
     }

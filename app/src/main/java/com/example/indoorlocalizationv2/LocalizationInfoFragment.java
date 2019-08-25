@@ -2,6 +2,9 @@ package com.example.indoorlocalizationv2;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -31,13 +34,6 @@ import com.example.indoorlocalizationv2.utils.BluetoothExtension;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.lemmingapex.trilateration.NonLinearLeastSquaresSolver;
-import com.lemmingapex.trilateration.TrilaterationFunction;
-
-import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
-import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.RealVector;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -45,7 +41,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -138,14 +133,21 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
             // Initialize localization list adapter
             _localizListAdapter = new LocalizationInfoListAdapter(view.getContext(), _localizationInfoList);
             _lvLocalizationInfo.setAdapter(_localizListAdapter);
-            _lvLocalizationInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    // TODO: or not TODO
-                }
-            });
-
             this.initializeEventHandlersForControls(view);
+
+            // TODO: Just some dummy data
+            BLEPosition rightAnchor = new BLEPosition();
+            rightAnchor.setX(2.0f);
+            BLEPosition topAnchor = new BLEPosition();
+            topAnchor.setZ(2.0f);
+            BLEPosition frontAnchor = new BLEPosition();
+            frontAnchor.setY(1.20f);
+
+            BLEPosition b1 = new BLEPosition();
+            b1.setX(0.40f);
+            b1.setZ(0.20f);
+            b1.setY(0.30f);
+            _localizationInfoList.add(new LocalizationInfo(b1, null, frontAnchor, rightAnchor, topAnchor));
         }
 
         super.onViewCreated(view, savedInstanceState);
@@ -163,7 +165,7 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
         } else {
             // Smooths the calculated distance
             double accuracy = (0.79976) * Math.pow(ratio, 6.7095) + 0.111;
-            return (float) accuracy;
+            return (float) Math.round(accuracy * 100) / 100;
         }
     }
 
@@ -186,12 +188,12 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
         for (int i = 0; i < predefinedValues.length; i++) {
             if (calculatedDistance <= predefinedValues[i][0]) {
                 normalizedDistance = (calculatedDistance + predefinedValues[i][0]) / 2;
-                return normalizedDistance;
+                return (float)Math.round(normalizedDistance * 100) / 100;
             }
         }
 
         // This will be called when the calculated distance is more than expected max distance
-        return calculatedDistance;
+        return (float)Math.round(calculatedDistance * 100) / 100;
     }
 
     /**

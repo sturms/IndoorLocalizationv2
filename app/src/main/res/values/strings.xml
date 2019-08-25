@@ -46,5 +46,6 @@
     <string name="manage_belongings_header">Belongings management</string>
     <string name="belongings_manage_item_name">Item name:</string>
     <string name="belongings_manage_item_descr">Item description:</string>
+    <string name="btn_localiz_view_position_graphically">Show more</string>
 
 </resources>
