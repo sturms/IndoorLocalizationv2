@@ -136,18 +136,18 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
             this.initializeEventHandlersForControls(view);
 
             // TODO: Just some dummy data
-            BLEPosition rightAnchor = new BLEPosition();
-            rightAnchor.setX(2.0f);
-            BLEPosition topAnchor = new BLEPosition();
-            topAnchor.setZ(2.0f);
-            BLEPosition frontAnchor = new BLEPosition();
-            frontAnchor.setY(1.20f);
-
-            BLEPosition b1 = new BLEPosition();
-            b1.setX(0.40f);
-            b1.setZ(0.20f);
-            b1.setY(0.30f);
-            _localizationInfoList.add(new LocalizationInfo(b1, null, frontAnchor, rightAnchor, topAnchor));
+//            BLEPosition rightAnchor = new BLEPosition();
+//            rightAnchor.setX(2.0f);
+//            BLEPosition topAnchor = new BLEPosition();
+//            topAnchor.setZ(2.0f);
+//            BLEPosition frontAnchor = new BLEPosition();
+//            frontAnchor.setY(1.20f);
+//
+//            BLEPosition b1 = new BLEPosition();
+//            b1.setX(0.40f);
+//            b1.setZ(0.20f);
+//            b1.setY(0.30f);
+//            _localizationInfoList.add(new LocalizationInfo(b1, null, frontAnchor, rightAnchor, topAnchor));
         }
 
         super.onViewCreated(view, savedInstanceState);
@@ -334,6 +334,7 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
                     continue;
                 }
 
+                float foundAnchorDistance = 0.0f;
                 int rssi = BluetoothExtension.getRssi(notification);
                 String anchorType = definedDevices.get(nSourceAddress).getDefinedDeviceType();
                 boolean isBeaconShownInList = false;
@@ -346,18 +347,22 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
                             BLEPosition leftAnchor = lInfo.getLeftAnchor();
                             leftAnchor = this.UpdateAnchorInformation(leftAnchor, definedDevices, nSourceAddress, nTargetAddress, rssi);
                             lInfo.setLeftAnchor(leftAnchor);
+                            foundAnchorDistance = leftAnchor.getDistance();
                         } else if (anchorType.equals(getString(R.string.manage_rdio_device_type_f_anchor))) {
                             BLEPosition frontAnchor = lInfo.getFrontAnchor();
                             frontAnchor = this.UpdateAnchorInformation(frontAnchor, definedDevices, nSourceAddress, nTargetAddress, rssi);
                             lInfo.setFrontAnchor(frontAnchor);
+                            foundAnchorDistance = frontAnchor.getDistance();
                         } else if (anchorType.equals(getString(R.string.manage_rdio_device_type_r_anchor))) {
                             BLEPosition rightAnchor = lInfo.getRightAnchor();
                             rightAnchor = this.UpdateAnchorInformation(rightAnchor, definedDevices, nSourceAddress, nTargetAddress, rssi);
                             lInfo.setRightAnchor(rightAnchor);
+                            foundAnchorDistance = rightAnchor.getDistance();
                         } else if (anchorType.equals(getString(R.string.manage_rdio_device_type_t_anchor))) {
                             BLEPosition topAnchor = lInfo.getTopAnchor();
                             topAnchor = this.UpdateAnchorInformation(topAnchor, definedDevices, nSourceAddress, nTargetAddress, rssi);
                             lInfo.setTopAnchor(topAnchor);
+                            foundAnchorDistance = topAnchor.getDistance();
                         }
 
                         if (lInfo.getLeftAnchor() != null
@@ -392,7 +397,7 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
                     String macAddress = nSourceAddress + "_" + nTargetAddress;
                     String definedDeviceName = definedDevices.get(nSourceAddress).getDefinedDeviceName() + "<-" + definedDevices.get(nTargetAddress).getDefinedDeviceName();
                     String definedDeviceType = definedDevices.get(nSourceAddress).getDefinedDeviceType() + "<-" + definedDevices.get(nTargetAddress).getDefinedDeviceType();
-                    this.logData(macAddress, definedDeviceName, definedDeviceType, rssi);
+                    this.logData(macAddress, definedDeviceName, definedDeviceType, rssi, foundAnchorDistance);
                     _loggingCounter = 0;
                 }
 
@@ -406,12 +411,12 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
         }
     }
 
-    private void logData(String deviceAddress, String deviceName, String deviceType, int rssi) {
+    private void logData(String deviceAddress, String deviceName, String deviceType, int rssi, float distance) {
         DeviceLog log = new DeviceLog();
-        log.setId(UUID.randomUUID().toString());
         log.setMacAddress(deviceAddress);
         log.setDeviceName(deviceName);
         log.setDeviceType(deviceType);
+        log.setDistance(distance);
         String flag = ((EditText) getView().findViewById(R.id.localiz_et_log_flag)).getText().toString();
         log.set_flag(flag);
         log.setRssi(rssi);
@@ -439,7 +444,7 @@ public class LocalizationInfoFragment extends Fragment implements View.OnClickLi
             averageDistance = queue.getAverageValue();
         }
 
-        return averageDistance;
+        return (float)Math.round(averageDistance * 100) / 100;
     }
 
     private Handler _httpClientHandle = new Handler();

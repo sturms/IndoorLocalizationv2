@@ -12,9 +12,9 @@ public class DeviceLog {
      * Device mac address
      */
     @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "log_id")
-    private String _id;
+    private int _id;
 
     @ColumnInfo(name = "log_mac_address")
     private String _macAddress;
@@ -31,11 +31,14 @@ public class DeviceLog {
     @ColumnInfo(name = "log_rssi")
     private int _rssi;
 
-    public String getId() {
+    @ColumnInfo(name = "log_distance")
+    private float _distance;
+
+    public int getId() {
         return _id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         _id = id;
     }
 
@@ -77,5 +80,13 @@ public class DeviceLog {
 
     public void setRssi(int rssi) {
         _rssi = rssi;
+    }
+
+    public float getDistance() {
+        return _distance;
+    }
+
+    public void setDistance(float distance) {
+        _distance = distance;
     }
 }

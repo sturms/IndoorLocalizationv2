@@ -1,0 +1,157 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "59e38797df0ae43c39dae9f99967bace",
+    "entities": [
+      {
+        "tableName": "defined_device",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`defined_device_id` TEXT NOT NULL, `defined_device_name` TEXT, `defined_device_type` TEXT, `anchor_coordinate_x` REAL NOT NULL, `anchor_coordinate_y` REAL NOT NULL, `anchor_coordinate_z` REAL NOT NULL, PRIMARY KEY(`defined_device_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "defined_device_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "_deviceName",
+            "columnName": "defined_device_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_deviceType",
+            "columnName": "defined_device_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_anchorCoordinateX",
+            "columnName": "anchor_coordinate_x",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "_anchorCoordinateY",
+            "columnName": "anchor_coordinate_y",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "_anchorCoordinateZ",
+            "columnName": "anchor_coordinate_z",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "defined_device_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "device_log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`log_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `log_mac_address` TEXT, `log_device_name` TEXT, `log_device_type` TEXT, `log_flag` TEXT, `log_rssi` INTEGER NOT NULL, `log_distance` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "log_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "_macAddress",
+            "columnName": "log_mac_address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_deviceName",
+            "columnName": "log_device_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_deviceType",
+            "columnName": "log_device_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_flag",
+            "columnName": "log_flag",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_rssi",
+            "columnName": "log_rssi",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "_distance",
+            "columnName": "log_distance",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "log_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "box_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`box_item_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `beacon_mac_address` TEXT, `box_item_name` TEXT, `box_item_description` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "box_item_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "beaconMacAddress",
+            "columnName": "beacon_mac_address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "boxItemName",
+            "columnName": "box_item_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "boxItemDescription",
+            "columnName": "box_item_description",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "box_item_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"59e38797df0ae43c39dae9f99967bace\")"
+    ]
+  }
+}

@@ -116,15 +116,22 @@ public class LocalizationInfoListAdapter extends BaseAdapter {
             tv_posXYZ.setText(beaconData.getX() + ", " + beaconData.getY() + ", " + beaconData.getZ());
         }
 
-        CustomView customView = v.findViewById(R.id.v_localiz_position_graphically);
+        if (beaconData != null
+            && leftAnchorData != null
+            && frontAnchorData != null
+            && rightAnchorData != null
+            && topAnchorData != null) {
 
-        // Front view
-        customView.changeBeaconFrontViewCoordinates(beaconData.getX(), beaconData.getZ(), 10);
-        customView.setTheShelfSizeFrontView(rightAnchorData.getX(), topAnchorData.getZ());
+            CustomView customView = v.findViewById(R.id.v_localiz_position_graphically);
 
-        // Top view
-        customView.changeBeaconTopViewCoordinates(beaconData.getX(), beaconData.getY(), 10);
-        customView.setTheShelfDepthTopView(frontAnchorData.getY());
+            // Front view
+            customView.changeBeaconFrontViewCoordinates(beaconData.getX(), beaconData.getZ(), 10);
+            customView.setTheShelfSizeFrontView(rightAnchorData.getX(), topAnchorData.getZ());
+
+            // Top view
+            customView.changeBeaconTopViewCoordinates(beaconData.getX(), beaconData.getY(), 10);
+            customView.setTheShelfDepthTopView(frontAnchorData.getY());
+        }
 
         Button btn_moreInfo = v.findViewById(R.id.btn_localiz_view_position_graphically);
         btn_moreInfo.setOnClickListener(new View.OnClickListener() {

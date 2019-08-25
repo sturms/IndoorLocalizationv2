@@ -262,7 +262,6 @@ public class DiscoverDevicesFragment extends Fragment implements View.OnClickLis
 
     private void logData(String deviceAddress, String deviceName, String deviceType, int rssi) {
         DeviceLog log = new DeviceLog();
-        log.setId(UUID.randomUUID().toString());
         log.setMacAddress(deviceAddress);
         log.setDeviceName(deviceName);
         log.setDeviceType(deviceType);

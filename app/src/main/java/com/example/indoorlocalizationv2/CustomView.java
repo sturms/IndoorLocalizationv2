@@ -47,12 +47,18 @@ public class CustomView extends View {
     }
 
     private void init(@Nullable AttributeSet attributeSet) {
+
+        // Sets the default color at the beginning to not be visible
+        this.setColor(Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT);
+    }
+
+    private void setColor(int beaconColor, int shelfColor, int textColor) {
         this.beaconPaint = new Paint();
-        this.beaconPaint.setColor(Color.GREEN);
+        this.beaconPaint.setColor(beaconColor);
         this.shelfPaint = new Paint();
-        this.shelfPaint.setColor(Color.RED);
+        this.shelfPaint.setColor(shelfColor);
         this.textPaint = new Paint();
-        this.textPaint.setColor(Color.BLACK);
+        this.textPaint.setColor(textColor);
         this.textPaint.setTextSize(30f);
     }
 
@@ -64,6 +70,7 @@ public class CustomView extends View {
         // Convert to meters
         this.beaconFrontViewCX = this.beaconFrontViewCX * this.scale;
         this.beaconFrontViewCY = this.beaconFrontViewCY * this.scale;
+        this.setColor(Color.GREEN, Color.RED, Color.BLACK);
 
         postInvalidate();
     }
@@ -76,6 +83,7 @@ public class CustomView extends View {
         // Convert to meters
         this.beaconTopViewCX = this.beaconTopViewCX * this.scale;
         this.beaconTopViewCY = this.beaconTopViewCY * this.scale;
+        this.setColor(Color.GREEN, Color.RED, Color.BLACK);
 
         postInvalidate();
     }
