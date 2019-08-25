@@ -147,9 +147,9 @@ public class SearchBelongingsFragment extends Fragment implements View.OnClickLi
 
                     // Filtering by item name and description
                     if (!_searchCriteria.isEmpty()
-                        && !item.getBoxItemName().contains(_searchCriteria) && !_searchCriteria.contains(item.getBoxItemName())
-                            && !item.getBoxItemDescription().contains(_searchCriteria) && !_searchCriteria.contains(item.getBoxItemDescription())
-                    ) {
+                        && !item.getBoxItemName().contains(_searchCriteria)
+                            && !_searchCriteria.contains(item.getBoxItemName())
+                            && !item.getBoxItemDescription().contains(_searchCriteria)) {
                         continue;
                     }
 
