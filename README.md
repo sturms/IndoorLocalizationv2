@@ -2,6 +2,7 @@
 Android app which allows you to search and organize your belongings by using BLE beacons and ESP32 microcontrollers.
 It is intended that BLE beacon is basically a box in a shelf. By using the app, you can view list of objects that 
 are placed within each box.
+Note: The microcontroller and Web API implementation also available.
 
 Real life example:
 
